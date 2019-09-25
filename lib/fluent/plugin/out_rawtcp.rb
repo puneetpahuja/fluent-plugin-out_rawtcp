@@ -94,7 +94,7 @@ module Fluent
         end
         return "#{record.to_json}#{new_line_suf}"
       else
-        return [tag, time, record].to_msgpack
+        return [tag, time, record.to_json].to_msgpack
       end
     end
 
