@@ -7,7 +7,7 @@ This plugin implements a simple TCP forward, without heartbeats or any other out
 
 ## Installation
 
-    gem install fluent-plugin-out_rawtcp
+    gem install fluent-plugin-out_rawtcp-godel
 
 ## Usage
 
