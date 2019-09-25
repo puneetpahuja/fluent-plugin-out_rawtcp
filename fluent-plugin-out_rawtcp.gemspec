@@ -1,13 +1,13 @@
 $:.push File.expand_path("../lib", __FILE__)
 
 Gem::Specification.new do |s|
-  s.name          = "fluent-plugin-out_rawtcp"
+  s.name          = "fluent-plugin-out_rawtcp-godel"
   s.version       = `cat VERSION`
   s.authors       = ["lxfontes"]
   s.email         = ["lxfontes+rawtcp@gmail.com"]
   s.description   = %q{Raw tcp output plugin for Fluentd}
   s.summary       = %q{output plugin for fluentd}
-  s.homepage      = "https://github.com/uken/fluent-plugin-out_rawtcp"
+  s.homepage      = "https://github.com/puneetpahuja/fluent-plugin-out_rawtcp"
   s.license       = 'MIT'
 
   s.files         = `git ls-files`.split($/)
