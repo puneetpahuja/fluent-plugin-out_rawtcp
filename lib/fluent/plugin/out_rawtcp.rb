@@ -56,10 +56,17 @@ module Fluent
 
       @nodes.each do |node|
         begin
-          send_data(node, chunk)
+          sock = connect(node)
+          opt = [1, @send_timeout.to_i].pack('I!I!')  # { int l_onoff; int l_linger; }
+          sock.setsockopt(Socket::SOL_SOCKET, Socket::SO_LINGER, opt)
+          opt = [@send_timeout.to_i, 0].pack('L!L!')  # struct timeval
+          sock.setsockopt(Socket::SOL_SOCKET, Socket::SO_SNDTIMEO, opt)
+          send_data(node, chunk, sock)
           return
         rescue
           error = $!
+        ensure
+          sock.close
         end
       end
 
@@ -68,21 +75,12 @@ module Fluent
     end
 
     private
-    def send_data(node, chunk)
-      sock = connect(node)
+    def send_data(node, chunk, sock)
       begin
-        opt = [1, @send_timeout.to_i].pack('I!I!')  # { int l_onoff; int l_linger; }
-        sock.setsockopt(Socket::SOL_SOCKET, Socket::SO_LINGER, opt)
-
-        opt = [@send_timeout.to_i, 0].pack('L!L!')  # struct timeval
-        sock.setsockopt(Socket::SOL_SOCKET, Socket::SO_SNDTIMEO, opt)
-
         chunk.msgpack_each do |tag, time, record|
           next unless record.is_a? Hash
           sock.write(prepare_data_to_send(tag, time, record))
         end
-      ensure
-        sock.close
       end
     end
 
